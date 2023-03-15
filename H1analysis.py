@@ -15,6 +15,7 @@ plt.ylabel('Frequency')
 plt.savefig('Contrast1Hist.png')
 
 #Test for normality
+import scipy
 from scipy import stats
 print(stats.shapiro(df['value']))
 
@@ -25,3 +26,5 @@ print(stats.ttest_1samp(df['value'], 0))
 # d = (sample mean - 0)/ sample sd with n-1 dof
 d = mean/SD
 print(d)
+
+print(scipy.__version__)

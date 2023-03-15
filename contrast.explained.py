@@ -3,13 +3,13 @@ import numpy as np
 from os import path
 import pandas as pd
 
-# Across subject - I think just labels the across subjects RDMs as rdmpth
+# Across subject - just labels the across subjects RDMs as rdmpth
 rdmpth='/foundcog/foundcog_results/pictures/rdms_pairwise'
 
 #Subjects with no rating data, remove from fMRI
 toremove = ['IRN1','ICN2','IRC3','IRC9','IRC13']
 
-# Within subject data - Not actually sure what this bit does
+# Load within subject data
 with open(path.join(rdmpth, f'rdms_within-subjects.pickle'),'rb') as f:
     within_dat = pickle.load(f)
  
@@ -61,6 +61,9 @@ with open(path.join(rdmpth, f'rdms_within-subjects.pickle'),'rb') as f:
     # Print the RDM values for subject 3:
     print(within_dat['all_rdm_within_across_reps']['both_vvc'][:,:,2])
     # Note - closer to 0 is more similar
+
+    df3 = pd.DataFrame(within_dat['all_rdm_within_across_reps']['both_vvc'][:,:,2])
+    df3.to_csv(r'Subject3RDM.csv')
     
     # .shape[0] gets numbers of rows / shape[1] gets number of columns
     ncond = within_dat['all_rdm_within_across_reps']['both_vvc'].shape[0] # Label ncond as number of rows in the matrix - ie 12

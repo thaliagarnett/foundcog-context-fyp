@@ -17,7 +17,9 @@ print(stats.shapiro(df2['Average']))
 
 #Scatterplot comparing the two variables
 import numpy as np
-plt.figure(2)
+plt.figure(2, figsize =(8,6))
+font = {'size' : 15}
+plt.rc('font', **font)
 plt.scatter(df2['Average'], df1['value'])
 m, b = np.polyfit(df2['Average'], df1['value'], 1)
 plt.plot(df2['Average'], m*(df2['Average'])+b, color='grey')
@@ -31,3 +33,4 @@ res = stats.pearsonr(df2['Average'], df1['value'])
 print(res)
 print(res.confidence_interval(confidence_level=0.95))
 print(100)
+

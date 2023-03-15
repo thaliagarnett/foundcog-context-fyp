@@ -43,9 +43,7 @@ AvgContrast = []
 
 #Start a for loop so that everything below will be done for each object
 for objind,objname in enumerate(within_dat['conditions_split']):
-#question - why is there objind AND objname - why not just one
 
-#Question - I did this line 
 
     print(objname)
 
@@ -60,7 +58,7 @@ for objind,objname in enumerate(within_dat['conditions_split']):
     df_contrast[objname] = pd.DataFrame(columns=['objvalue','subject'])
     df_contrast[objname]['objvalue']=objcon_per_subj #puts the contrast values for each subject in the "objvalue" column
     df_contrast[objname]['subject']=sub_list_tidy #puts the subject ID in the "subject" column
-    df_contrast[objname].to_csv(f'contrast_{objname}.csv') #exports to csv ----- don't know if I actually need to do this because the dataframe is in this script anyway
+    df_contrast[objname].to_csv(f'contrast_{objname}.csv') #exports to csv
 
     #Now start the analysis
 
@@ -69,10 +67,22 @@ for objind,objname in enumerate(within_dat['conditions_split']):
     print(stats.shapiro(df_contrast[objname]['objvalue']))
     print(stats.shapiro(df3[objname]))
 
+    #Context/VE ratings hists for each category
+    import matplotlib.pyplot as plt
+    plt.figure(objind) #this important to ensure separate from future plots
+    df3[objname].plot(kind='hist')
+    plt.title('Histogram of Visual Experience')
+    plt.xlabel('Visual Experience')
+    plt.ylabel('Frequency')
+    plt.savefig(f'Context_{objname}.png')
+
+    import statistics
+    print(statistics.stdev(df3[objname]))
+
     #Scatterplot showing correlation between contrast values and context ratings
     from matplotlib import pyplot as plt
-    plt.figure(objind, figsize=(8,6))
-    font = {'size' : 22}
+    plt.figure((objind+10), figsize=(8,6))
+    font = {'size' : 15}
     plt.rc('font', **font)
     plt.scatter(df3[objname], df_contrast[objname]['objvalue'])
     m, b = np.polyfit(df3[objname], df_contrast[objname]['objvalue'], 1)
@@ -97,8 +107,8 @@ shopping_contrast = pd.concat((df_contrast['shoppingcart']['objvalue'], df_contr
 print('shopping')
 print(stats.shapiro(shopping_ratings))
 print(stats.shapiro(shopping_contrast))
-plt.figure(11, figsize=(10,10))
-font = {'size' : 22}
+plt.figure(40, figsize=(8,6))
+font = {'size' : 15}
 plt.rc('font', **font)
 plt.scatter(shopping_ratings, shopping_contrast)
 m, b = np.polyfit(shopping_ratings, shopping_contrast, 1)
@@ -110,6 +120,17 @@ plt.savefig(f'ContextContrast_ShoppingCluster.png')
 res2 = stats.spearmanr(shopping_ratings, shopping_contrast)
 print(res2)
 
+print(statistics.stdev(shopping_ratings))
+
+
+plt.figure(18) #this important to ensure separate from future plots
+shopping_ratings.plot(kind='hist')
+plt.title('Histogram of Visual Experience')
+plt.xlabel('Visual Experience')
+plt.ylabel('Frequency')
+plt.savefig('shopping_ratings_hist.png')
+
+
 # H4 Print the average lists (NB they are in the same order as in conditions_split)
 print('H4')
 print(AvgRatings)
@@ -118,7 +139,8 @@ print(AvgContrast)
 print(stats.shapiro(AvgRatings))
 print(stats.shapiro(AvgContrast))
 
-plt.figure(12,figsize=(8,6))
+plt.figure(30,figsize=(8,6))
+font = {'size' : 15}
 plt.scatter(AvgRatings, AvgContrast)
 m, b = np.polyfit(AvgRatings, AvgContrast, 1)
 plt.plot(AvgRatings, m*np.array(AvgRatings)+b, color='grey')
